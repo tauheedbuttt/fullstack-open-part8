@@ -11,6 +11,12 @@ const UpdateAuthor = ({ authors }) => {
 
   const [updateAuthor, result] = useMutation(EDIT_AUTHOR);
 
+  const notify = (message) => {
+    setError(message);
+    setTimeout(() => {
+      setError(null);
+    }, 10000);
+  };
   const onSubmit = (event) => {
     event.preventDefault();
     console.log("update author...");
@@ -23,7 +29,7 @@ const UpdateAuthor = ({ authors }) => {
 
   useEffect(() => {
     if (result.data && result.data.editAuthor === null) {
-      setError("author not found");
+      notify("author not found");
     }
   }, [result.data]);
 
