@@ -26,11 +26,7 @@ mongoose
   .catch((error) => {
     console.log("error connection to MongoDB:", error.message);
   });
-
-const server = new ApolloServer({
-  typeDefs: require("./schema"),
-  resolvers: require("./resolvers"),
-});
+mongoose.set("debug", true);
 
 // setup is now within a function
 const start = async () => {

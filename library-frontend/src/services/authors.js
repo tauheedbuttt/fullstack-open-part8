@@ -5,6 +5,7 @@ export const AUTHOR_DETAILS = gql`
     id
     name
     born
+    bookCount
   }
 `;
 

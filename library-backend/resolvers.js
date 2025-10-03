@@ -24,11 +24,12 @@ const resolvers = {
       }).populate({
         path: "author",
         match: args.author ? { name: args.author } : {},
+        populate: { path: "bookCount" },
       });
 
       return books.filter((item) => !!item.author);
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => Author.find({}).populate("bookCount"),
     findBook: async (root, args) => {
       const { title } = args;
       return Book.findOne({ title });
@@ -79,7 +80,11 @@ const resolvers = {
         });
       }
 
-      const bookResponse = await book.populate("author");
+      const bookResponse = await book.populate({
+        path: "author",
+        match: args.author ? { name: args.author } : {},
+        populate: { path: "bookCount" },
+      });
       pubsub.publish("BOOK_ADDED", { bookAdded: bookResponse });
       return bookResponse;
     },
@@ -102,7 +107,7 @@ const resolvers = {
           },
         });
       }
-      return author;
+      return author.populate("bookCount");
     },
     createUser: async (root, args) => {
       const user = new User({

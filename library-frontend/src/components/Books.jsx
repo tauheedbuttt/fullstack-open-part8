@@ -20,7 +20,7 @@ const Books = (props) => {
       client.cache.updateQuery(
         { query: ALL_BOOKS, variables: variables(genre) },
         (data) => {
-          window.alert(
+          alert(
             `New book added: ${bookAdded.title} by ${bookAdded.author.name}`
           );
           return {
