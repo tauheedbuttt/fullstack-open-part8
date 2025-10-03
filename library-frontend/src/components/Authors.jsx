@@ -1,8 +1,20 @@
+import { useQuery } from "@apollo/client";
+
+import { ALL_AUTHORS } from "../services/authors";
+import UpdateAuthor from "./UpdateAuthor";
+
 const Authors = (props) => {
-  if (!props.show) {
-    return null
+  const result = useQuery(ALL_AUTHORS);
+
+  if (result.loading) {
+    return <div>loading...</div>;
   }
-  const authors = []
+  const authors = result.data.allAuthors;
+
+  // eslint-disable-next-line react/prop-types
+  if (!props.show) {
+    return null;
+  }
 
   return (
     <div>
@@ -23,8 +35,10 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-    </div>
-  )
-}
 
-export default Authors
+      <UpdateAuthor authors={authors} />
+    </div>
+  );
+};
+
+export default Authors;
