@@ -1,17 +1,34 @@
-import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../services/books";
+import { useQuery, useSubscription } from "@apollo/client";
 import { useState } from "react";
+import { ALL_BOOKS, BOOK_ADDED } from "../services/books";
 
 const Books = (props) => {
   const [genre, setGenre] = useState();
-  // eslint-disable-next-line react/prop-types
   const variables = (genre) => ({
+    // eslint-disable-next-line react/prop-types
     genre: genre || props.favoriteGenre || null,
   });
 
   const result = useQuery(ALL_BOOKS, {
     // eslint-disable-next-line react/prop-types
     variables: variables(genre),
+  });
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const bookAdded = data.data.bookAdded;
+      client.cache.updateQuery(
+        { query: ALL_BOOKS, variables: variables(genre) },
+        (data) => {
+          window.alert(
+            `New book added: ${bookAdded.title} by ${bookAdded.author.name}`
+          );
+          return {
+            allBooks: [...data.allBooks, bookAdded],
+          };
+        }
+      );
+    },
   });
 
   // eslint-disable-next-line react/prop-types

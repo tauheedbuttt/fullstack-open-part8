@@ -35,8 +35,6 @@ const NewBook = (props) => {
   const submit = async (event) => {
     event.preventDefault();
 
-    console.log("add book...");
-
     addBook({
       variables: { title, author, published: Number(published), genres },
     });
@@ -89,9 +87,7 @@ const NewBook = (props) => {
           </button>
         </div>
         <div>genres: {genres.join(" ")}</div>
-        <button disabled={loading} type="submit">
-          create book
-        </button>
+        <button type="submit">create book</button>
       </form>
     </div>
   );
